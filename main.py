@@ -1,59 +1,53 @@
+from rich.console import Console
+from rich.table import Table
 
-import rich
-from rich.console import Console # library to console in terminal
-from rich.table import Table # library for table in terminal
+console = Console()
+
+def show_main_menu():
+    table = Table(title="\nEncode or Decode")
+    table.add_column("OPTION 1", style="steel_blue1")
+    table.add_column("OPTION 2", style="sea_green1")
+    table.add_row("Encode", "Decode")
+    console.print(table)
+
+
+def show_methods_menu(action: str):
+    table = Table(title=f"\nMethods — {action}")
+    for col, method in [("A", "Golomb"), ("B", "Elias-Gamma"), ("C", "Fibonacci"), ("D", "Huffman")]:
+        table.add_column(f"OPTION {col}", style="khaki1")
+    table.add_row("Golomb", "Elias-Gamma", "Fibonacci", "Huffman")
+    console.print(table)
+
+
+METHODS = {
+    "A": "Golomb",
+    "B": "Elias-Gamma",
+    "C": "Fibonacci",
+    "D": "Huffman",
+}
+
+
+def handle_action(action: str):
+    show_methods_menu(action)
+    choice = input(f"Choose a method to {action.lower()}: ").upper()
+    if choice in METHODS:
+        console.print(f"[bold green]{action}ing with {METHODS[choice]}...[/bold green]")
+    else:
+        console.print("[bold red]Invalid option![/bold red]")
+
 
 def main():
-    
     while True:
-        
-        console = Console()
-        table = Table(title="Encode or Decode")
-        table.add_column("OPTION 1", style="steel_blue1")
-        table.add_column("OPTION 2", style="sea_green1")
-        table.add_row("Encode", "Decode")
-        console.print(table)
-        
-        option = input("Enter the option: ")
-        
-        if option == '1':            
-            table = Table(title="Methods")
-            table.add_column("OPTION A", style="khaki1")
-            table.add_column("OPTION B", style="khaki1")
-            table.add_column("OPTION C", style="khaki1")
-            table.add_column("OPTION D", style="khaki1")
-            table.add_row("Golomb", "Elias-Gamma", "Fibonacci", "Huffman")
-            console.print(table)
-            
-            option_encode = input("Choose an option to encode: ")
-            
-            if option_encode == 'A':
-                print('Golomb')
-            elif option_encode == 'B':
-                print('Elias-Gamma')
-            elif option_encode == 'C':
-                print('Fibonacci')
-            elif option_encode == 'D':
-                print('Huffman')
-            else:
-                print('[bold red]Invalid Option![/bold red]') 
-            
-        elif option == '1': 
-            option_decode = input("Choose an option to decode: ")
-            
-            if option_decode == 'A':
-                print('Golomb')
-            elif option_decode == 'B':
-                print('Elias-Gamma')
-            elif option_decode == 'C':
-                print('Fibonacci')
-            elif option_decode == 'D':
-                print('Huffman')
-            else:
-                print('[bold red]Invalid Option![/bold red]')
-            
+        show_main_menu()
+        option = input("Enter the option: ").strip()
+
+        if option == "1":
+            handle_action("Encode")
+        elif option == "2":
+            handle_action("Decode")
         else:
-            print('[bold red]Invalid Option![/bold red]')
-    
-if __name__ == '__main__':
+            console.print("[bold red]Invalid option![/bold red]")
+
+
+if __name__ == "__main__":
     main()
