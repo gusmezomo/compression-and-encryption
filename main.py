@@ -24,6 +24,17 @@ METHOD_NAMES = {
     "4": "Huffman",
 }
 
+METHOD_HINTS = {
+    ("1", "Encode"): "Enter a sequence of positive integers separated by spaces (e.g. 1 3 5): ",
+    ("1", "Decode"): "Enter a binary string (e.g. 11011010): ",
+    ("2", "Encode"): "Enter a positive integer and divisor m separated by space (e.g. 10 3): ",
+    ("2", "Decode"): "Enter a Golomb-encoded binary string: ",
+    ("3", "Encode"): "Enter a positive integer (e.g. 7): ",
+    ("3", "Decode"): "Enter an Elias-Gamma encoded binary string: ",
+    ("4", "Encode"): "Enter text to compress (e.g. hello world): ",
+    ("4", "Decode"): "Enter a Huffman-encoded binary string: ",
+}
+
 def show_main_menu():
     table = Table(title="\nEncode or Decode")
     table.add_column("OPTION 1", style="steel_blue1")
@@ -49,7 +60,8 @@ def handle_action(action: str):
     name = METHOD_NAMES[choice]
 
     method_class = METHODS[choice]
-    text = input("Enter text: ").strip()
+    hint = METHOD_HINTS.get((choice, action), "Enter input: ")
+    text = input(hint).strip()
     console.print(f"\n[bold green]{action}ing with {name}...[/bold green]")
 
     try:
