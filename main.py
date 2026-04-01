@@ -1,10 +1,29 @@
-#Librarys for better output in terminal 
+#librarys for better output in terminal 
 from rich.console import Console
 from rich.table import Table
 
+# import the methods 
+# from golomb import Golomb
+# from elias_gamma import EliasGamma
+from logic.fibonacci import Fibonacci
+# from huffman import Huffman
+
 console = Console()
 
-#Function to facilitate output menu
+METHODS: dict[str, type] = {
+    "1": Fibonacci,
+    # "2": Golomb,
+    # "3": EliasGamma,
+    # "4": Huffman,
+}
+
+METHOD_NAMES = {
+    "1": "Fibonacci",
+    "2": "Golomb",
+    "3": "Elias-Gamma",
+    "4": "Huffman",
+}
+
 def show_main_menu():
     table = Table(title="\nEncode or Decode")
     table.add_column("OPTION 1", style="steel_blue1")
@@ -12,32 +31,37 @@ def show_main_menu():
     table.add_row("Encode", "Decode")
     console.print(table)
 
-#Function to facilitate output methods
 def show_methods_menu(action: str):
     table = Table(title=f"\nMethods — {action}")
-    for col, method in [("1", "Golomb"), ("2", "Elias-Gamma"), ("3", "Fibonacci"), ("4", "Huffman")]:
-        table.add_column(f"OPTION {col}", style="khaki1")
-    table.add_row("Golomb", "Elias-Gamma", "Fibonacci", "Huffman")
+    for key, name in METHOD_NAMES.items():
+        table.add_column(f"OPTION {key}", style="khaki1")
+    table.add_row(*METHOD_NAMES.values())
     console.print(table)
 
-#Methods for this project
-METHODS = {
-    "1": "Golomb",
-    "2": "Elias-Gamma",
-    "3": "Fibonacci",
-    "4": "Huffman",
-}
-
-#Better output for showing methods
 def handle_action(action: str):
     show_methods_menu(action)
-    choice = input(f"Choose a method to {action.lower()}: ").upper()
-    if choice in METHODS:
-        console.print(f"[bold green]{action}ing with {METHODS[choice]}...[/bold green]")
-    else:
-        console.print("\n[bold red]Invalid option![/bold red]")
+    choice = input(f"Choose a method to {action.lower()}: ").strip()
 
-#Main method to run everything
+    if choice not in METHOD_NAMES:
+        console.print("\n[bold red]Invalid option![/bold red]")
+        return
+
+    name = METHOD_NAMES[choice]
+
+    method_class = METHODS[choice]
+    text = input("Enter text: ").strip()
+    console.print(f"\n[bold green]{action}ing with {name}...[/bold green]")
+
+    try:
+        if action == "Encode":
+            result = method_class.encode(text)
+            console.print(f"Result: {result}")
+        else:
+            result = method_class.decode(text)
+            console.print(f"Result: {result}")
+    except NotImplementedError as e:
+        console.print(f"\n[yellow]{e}[/yellow]")
+
 def main():
     show_main_menu()
     option = input("Enter the option: ").strip()
