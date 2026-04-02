@@ -84,9 +84,17 @@ class Fibonacci:
         #*bit — o caractere atual ('0' ou '1') em cada iteração
         #*fibs[i] — o fibonacci correspondente àquela posição
         
-    #@classmethod
-    #def decode(cls, bits: str) -> str:
-        #return 0
+    @classmethod
+    def decode(cls, bits: str) -> str:
+        codewords = cls.split_codewords(bits)
+
+        chars = []
+
+        for codeword in codewords:
+            decimal = cls._fibonacci_decode(codeword)
+            chars.append(chr(decimal))
+        
+        return ''.join(chars)
     
 # TESTES
 # if __name__ == "__main__":
@@ -98,3 +106,9 @@ class Fibonacci:
 #     print(f"encoded: {encoded}")
 #     decoded = Fibonacci._fibonacci_decode(encoded)
 #     print(f"decoded: {decoded}")  # deve dar 65
+
+# if __name__ == "__main__":
+#     encoded = Fibonacci.encode("AB")
+#     print(f"encoded: {encoded}")
+#     decoded = Fibonacci.decode(encoded)
+#     print(f"decoded: {decoded}")  # deve dar AB
