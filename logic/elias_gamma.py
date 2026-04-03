@@ -20,3 +20,7 @@ class EliasGamma:
             if continuar.lower() != 's':
                 break
             symbol_str = input("simbolo: ")
+    
+    @classmethod #temporario, enquanto decode nao esta feito, para nao quebrar o main
+    def decode():
+        return 0
