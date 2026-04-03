@@ -53,62 +53,41 @@ class Fibonacci:
 
     @staticmethod
     def split_codewords(bits: str) -> list[str]:
-        codeword_list = []
-        buffer = []
+        codeword_list = []  # list to store the separated codewords
+        buffer = []  # accumulates bits until a codeword is complete
 
         for i, bit in enumerate(bits):
-            buffer.append(bit)
-            if i > 0 and bit == '1' and bits[i-1] == '1' and len(buffer) > 1:
-                codeword_list.append(''.join(buffer))
-                buffer = []
+            buffer.append(bit)  # always accumulate the current bit
+            if i > 0 and bit == '1' and bits[i-1] == '1' and len(buffer) > 1:  # detects the stop bit pattern "11"
+                codeword_list.append(''.join(buffer))  # saves the complete codeword
+                buffer = []  # clears the buffer for the next codeword
         return codeword_list 
     
     @staticmethod
-    def _fibonacci_decode(codeword: str) -> int: #convert codeword to decimal
-        bits = codeword[:-1]
-        N = len(bits)
+    def _fibonacci_decode(codeword: str) -> int:
+        bits = codeword[:-1]  # removes the stop bit (last character)
+        N = len(bits)  # number of fibonacci numbers needed
 
-        fibs = [1,2]
-        while len(fibs) < N:
-            nxt = fibs[-1] + fibs[-2]
+        fibs = [1, 2]  # fibonacci sequence starts at 1, 2
+        while len(fibs) < N:  # generate exactly N fibonacci numbers
+            nxt = fibs[-1] + fibs[-2]  # next = last + penultimate
             fibs.append(nxt)
 
         total = 0
-        for i, bit in enumerate(bits):
+        for i, bit in enumerate(bits):  # each bit position maps to a fibonacci number
             if bit == '1':
-                total += fibs[i]
+                total += fibs[i]  # sum the fibonacci at that position
         
-        return total
-        #*fibs — lista dos números fibonacci gerados
-        #*bits — a string do codeword sem o stop bit
-        #*bit — o caractere atual ('0' ou '1') em cada iteração
-        #*fibs[i] — o fibonacci correspondente àquela posição
+        return total  # decimal value of the codeword
         
     @classmethod
     def decode(cls, bits: str) -> str:
-        codewords = cls.split_codewords(bits)
+        codewords = cls.split_codewords(bits)  # split binary string into individual codewords
 
         chars = []
 
         for codeword in codewords:
-            decimal = cls._fibonacci_decode(codeword)
-            chars.append(chr(decimal))
+            decimal = cls._fibonacci_decode(codeword)  # convert each codeword to decimal
+            chars.append(chr(decimal))  # convert decimal to ASCII character
         
-        return ''.join(chars)
-    
-# TESTES
-# if __name__ == "__main__":
-#     resultado = Fibonacci.split_codewords("0110111011")
-#     print(resultado)
-
-# if __name__ == "__main__":
-#     encoded = Fibonacci._fibonacci_encode(65)
-#     print(f"encoded: {encoded}")
-#     decoded = Fibonacci._fibonacci_decode(encoded)
-#     print(f"decoded: {decoded}")  # deve dar 65
-
-# if __name__ == "__main__":
-#     encoded = Fibonacci.encode("AB")
-#     print(f"encoded: {encoded}")
-#     decoded = Fibonacci.decode(encoded)
-#     print(f"decoded: {decoded}")  # deve dar AB
+        return ''.join(chars)  # join all characters into the final string
